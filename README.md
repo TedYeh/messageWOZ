@@ -1,7 +1,7 @@
 # messageWOZ
 Wizard-of-Oz dataset for message passing
 
-* Goal: Build dialogue dataset to control apps(domains) below: 
+* Goal: Build chinese dialogue dataset to control apps(domains) below: 
     1. email
     2. Line
     3. Calendar
