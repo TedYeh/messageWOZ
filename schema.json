@@ -32,7 +32,7 @@
                     "一般信件",
                     "密件副本"
                 ],
-                "is_categorical": false
+                "is_categorical": true
             }
         ]
     },
@@ -91,7 +91,7 @@
                     "5",
                     "自訂"
                 ],
-                "is_categorical": false
+                "is_categorical": true
             },
             {
                 "name": "calendar-startdate",
