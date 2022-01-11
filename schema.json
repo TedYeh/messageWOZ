@@ -24,15 +24,18 @@
                 "is_categorical": false
             },
             {
-                "name": "email-type",
-                "description": "type of email",
-                "chinese_description": "信件類型",
-                "possible_values": [
-                    "副本",
-                    "一般信件",
-                    "密件副本"
-                ],
-                "is_categorical": true
+                "name": "email-copy_receiver",
+                "description": "the copy receiver you want to sent to",
+                "chinese_description": "副本收件者",
+                "possible_values": [],
+                "is_categorical": false
+            },
+            {
+                "name": "email-blind_copy_receiver",
+                "description": "the blind copy receiver you want to sent to",
+                "chinese_description": "密件副本收件者",
+                "possible_values": [],
+                "is_categorical": false
             }
         ]
     },
@@ -87,43 +90,28 @@
                 "is_categorical": false
             },
             {
-                "name": "calendar-buildtime",
-                "description": "the time of the event build in the future",
-                "chinese_description": "活動建立時間",
-                "possible_values": [
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                    "5",
-                    "自訂"
-                ],
-                "is_categorical": true
-            },
-            {
-                "name": "calendar-startdate",
+                "name": "calendar-start_date",
                 "description": "the start date of the event",
                 "chinese_description": "活動開始時間",
                 "possible_values": [],
                 "is_categorical": false
             },
             {
-                "name": "calendar-enddate",
+                "name": "calendar-end_date",
                 "description": "the end date of the event",
                 "chinese_description": "活動結束時間",
                 "possible_values": [],
                 "is_categorical": false
             },
             {
-                "name": "calendar-allday",
+                "name": "calendar-all_day",
                 "description": "whether the event is all-day enevt",
                 "chinese_description": "是否為全天活動",
                 "possible_values": [
                     "是",
                     "否"
                 ],
-                "is_categorical": true
-                
+                "is_categorical": true                
             }
         ]
     }
