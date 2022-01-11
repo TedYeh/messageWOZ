@@ -24,9 +24,9 @@
                 "is_categorical": false
             },
             {
-                "name": "email-needcc",
-                "description": "whether need a copy",
-                "chinese_description": "是否需要副本",
+                "name": "email-type",
+                "description": "type of email",
+                "chinese_description": "信件類型",
                 "possible_values": [
                     "副本",
                     "一般信件",
