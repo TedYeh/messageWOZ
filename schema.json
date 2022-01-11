@@ -83,6 +83,13 @@
                 "name": "calendar-time",
                 "description": "the time of the event",
                 "chinese_description": "活動時間",
+                "possible_values": [],
+                "is_categorical": false
+            },
+            {
+                "name": "calendar-buildtime",
+                "description": "the time of the event build in the future",
+                "chinese_description": "活動建立時間",
                 "possible_values": [
                     "1",
                     "2",
