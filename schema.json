@@ -28,8 +28,9 @@
                 "description": "whether need a copy",
                 "chinese_description": "是否需要副本",
                 "possible_values": [
-                    "yes",
-                    "no"
+                    "副本",
+                    "一般信件",
+                    "密件副本"
                 ],
                 "is_categorical": false
             }
@@ -79,6 +80,20 @@
                 "is_categorical": false
             },
             {
+                "name": "calendar-time",
+                "description": "the time of the event",
+                "chinese_description": "活動時間",
+                "possible_values": [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "自訂"
+                ],
+                "is_categorical": false
+            },
+            {
                 "name": "calendar-startdate",
                 "description": "the start date of the event",
                 "chinese_description": "活動開始時間",
@@ -97,8 +112,8 @@
                 "description": "whether the event is all-day enevt",
                 "chinese_description": "是否為全天活動",
                 "possible_values": [
-                    "yes",
-                    "no"
+                    "是",
+                    "否"
                 ],
                 "is_categorical": true
                 
