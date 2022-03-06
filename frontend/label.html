@@ -7,9 +7,14 @@
     <link rel="stylesheet" href="css/style.css"/>
     <!-- JavaScript -->
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/label_script.js"></script>
     <script src="js/sweetalert2.all.min.js"></script>
-    <title>Dialogue - MessageWOZ</title>
+    <script>
+        window.onload = function () {
+            load_file_list();
+        }
+    </script>
+    <title>Label - MessageWOZ</title>
 </head>
 <body>
 <!-- NavBar -->
@@ -23,18 +28,59 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html">Dialogue</a>
+                    <a class="nav-link" aria-current="page" href="index.html">Dialogue</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="label.html">Label</a>
+                    <a class="nav-link active" href="label.html">Label</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-
 <div class="container">
+    <div class="row" style="margin-top: 15px">
+        <div class="col-6">
+            <form onsubmit="return false">
+                <div class="input-group">
+                    <select id="dialogue-file-list" class="form-select" onchange="dropdown_file_list_onchange()">
+                        <option selected>File</option>
+                    </select>
+                    <select id="dialogue-id-list" class="form-select">
+                        <option selected>Dialogue ID</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="load_dialogue_content()">Load</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row">
+        <div class="col-6">
+            <div class="card" style="margin-top:15px">
+                <div class="card-header" id="card_title">
+                    Dialogue
+                    <button class="btn btn-sm btn-secondary">Reset</button>
+                </div>
+                <div class="card-body overflow-auto" id="chat_content" style="height: 500px">
+                    <table id="chat-table" class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Role</th>
+                            <th>Message</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <form onsubmit="return false">
+                <div class="input-group">
+                    <input id="user-name" class="form-control" placeholder="Username">
+                    <button class="btn btn-success" onclick="submit_dialogue()">Submit</button>
+                </div>
+            </form>
+        </div>
         <div class="col-6">
             <div class="card" style="margin-top:15px">
                 <div class="card-header">
@@ -56,40 +102,8 @@
                     </table>
                 </div>
             </div>
-            <form onsubmit="return false">
-                <div class="input-group">
-                    <input id="user-name" class="form-control" placeholder="Username">
-                    <button class="btn btn-success" onclick="submit_dialogue()">Submit</button>
-                </div>
-            </form>
         </div>
-        <div class="col-6">
-            <div class="card" style="margin-top:15px">
-                <div class="card-header" id="card_title">
-                    Dialogue
-                    <button type="button" class="btn btn-sm btn-secondary" onclick="reset_chat_table()">Clear</button>
-                </div>
-                <div class="card-body overflow-auto" id="chat_content" style="height: 500px">
-                    <table id="chat-table" class="table">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Role</th>
-                            <th>Message</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <form onsubmit="return false">
-                <div class="input-group">
-                    <input class="form-control" id="chat_input" placeholder="Message">
-                    <button class="btn btn-primary" onclick="send_message()">Send</button>
-                </div>
-            </form>
-        </div>
+
     </div>
 </div>
 </body>

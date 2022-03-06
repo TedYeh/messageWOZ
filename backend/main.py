@@ -5,14 +5,16 @@ from pydantic import BaseModel
 from schema import *
 import json
 import os
+import uvicorn
+import glob
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=['*'],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 
 
@@ -56,6 +58,14 @@ class UploadDialogue(BaseModel):
     filename: str
 
 
+class DialogueFile(BaseModel):
+    file: str
+
+class DialogueContent(BaseModel):
+    file: str
+    dialogue_id: str
+
+
 schema_data = ServiceSchema()
 DIR_PATH = './data'
 
@@ -89,9 +99,36 @@ def save_dialogue(dialogue, dir_path, file_name):
             json.dump([dialogue_dict], f, ensure_ascii=False, indent=4)
 
 
+def get_id_list(file_path):
+    dialogue_id_list = []
+    if os.path.isfile(file_path):
+        with open(file_path, encoding='utf-8') as f:
+            try:
+                data = json.load(f)
+                for dialogue in data:
+                    dialogue_id_list.append(dialogue['dialogue_id'])
+            except ValueError:
+                pass
+    return dialogue_id_list
+
+
+def load_dialogue_content(file_path, dialogue_id):
+    result = {}
+    if os.path.isfile(file_path):
+        with open(file_path, encoding='utf-8') as f:
+            try:
+                data = json.load(f)
+                for dialogue in data:
+                    if dialogue['dialogue_id'] == dialogue_id:
+                        return dialogue
+            except ValueError:
+                pass
+    return result
+
+
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {'message': 'Hello World'}
 
 
 @app.get("/hello/{name}")
@@ -125,4 +162,26 @@ async def upload_dialogue(dialogue: UploadDialogue):
 
 @app.get("/schema")
 async def get_new_task():
-    return schema_data.get_random_task()
+    return schema_data.get_random_schema()
+
+
+@app.get("/file")
+async def get_file_list():
+    return [f.replace(DIR_PATH, '') for f in glob.glob(os.path.join(DIR_PATH, '*/*.json'))]
+
+
+@app.post("/dialogue_id_list")
+async def get_dialogue_id_list(filename: DialogueFile):
+    return get_id_list(DIR_PATH + filename.file)
+
+
+@app.post('/dialogue_content')
+async def get_dialogue_content(query: DialogueContent):
+    return load_dialogue_content(DIR_PATH +     query.file, query.dialogue_id)
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+# Run server with command:
+# uvicorn --host 127.0.0.1 --reload main:app
