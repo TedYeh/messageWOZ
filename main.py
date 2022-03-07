@@ -5,6 +5,7 @@ from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
 from schema import *
 from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import json
 import os
@@ -12,7 +13,7 @@ import uvicorn
 import glob
 
 app = FastAPI()
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 # -------------------websocket 多人連線對話部分-------------------
 # locate templates
 templates = Jinja2Templates(directory="templates")
