@@ -26,6 +26,41 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 schema_data = ServiceSchema()
 
+class RegisterValidator(BaseModel): # 接收使用者名稱用
+    username: str
+
+    class Config:
+        orm_mode = True
+
+class State(BaseModel):
+    active_intent: str
+    requested_slots: list
+    slot_values: dict
+
+
+class Frame(BaseModel):
+    actions: list
+    service: str
+    slots: list
+    state: State
+
+class Turn(BaseModel):
+    # TODO: delete Optional
+    frames: Optional[List[Frame]]
+    speaker: str
+    turn_id: str
+    utterance: str
+
+class Dialogue(BaseModel):
+    dialogue_id: str
+    services: List[str]
+    turns: List[Turn]
+
+class UploadDialogue(BaseModel):
+    dialogue: Dialogue
+    user: str
+    filename: str
+
 @app.get("/") # 主頁(登入頁面)，選擇你要擔任的腳色(SYSTEM、USER)
 def get_home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
@@ -40,21 +75,49 @@ def get_chat(request: Request):
 def get_user(request: Request):
     return request.cookies.get("X-Authorization")
 
-@app.get("/schema") # 確認目前腳色是SYSTEM or USER
+@app.get("/schema") # sent multi-domain slot
 async def get_new_task():
-    return schema_data.get_random_schema()
+    return schema_data.get_random_schemas()
+    #return schema_data.get_random_schema()
 
-class RegisterValidator(BaseModel): # 接收使用者名稱用
-    username: str
-
-    class Config:
-        orm_mode = True
-
+@app.post("/upload_dialogue")
+async def upload_dialogue(dialogue: UploadDialogue):
+    dialogue_data = dialogue.dict()
+    save_dialogue(dialogue.dialogue, os.path.join(DIR_PATH, dialogue_data["user"]),
+                  dialogue.filename)
+    return dialogue
 
 @app.post("/api/register") # 在home.html使用而已，做腳色註冊用
 def register_user(user: RegisterValidator, response: Response):
     response.set_cookie(key="X-Authorization", value=user.username, httponly=True)
 
+def save_dialogue(dialogue, dir_path, file_name):
+    file_name_prefix = 'dialogue_'
+    file_num = int(file_name.replace(file_name_prefix, ''))
+
+    # 檢查資料夾是否存在
+    if not os.path.isdir(dir_path):
+        os.makedirs(dir_path, exist_ok=True)
+
+    file_path = os.path.join(dir_path, file_name)
+    file_path += '.json'
+    dialogue_dict = dialogue.dict()
+    # 檢查檔案是否存在
+    if os.path.isfile(file_path):
+        with open(file_path, encoding='utf-8') as f:
+            data = json.load(f)
+            file_current_dialogue_id = int(data[-1]['dialogue_id'].split('_')[1])
+            dialogue_id_str = '{:04d}'.format(file_current_dialogue_id + 1)
+            dialogue_dict['dialogue_id'] = f'{file_num}_{dialogue_id_str}'
+            data.append(dialogue_dict)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    else:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            # f.write(dialogue.json())
+            dialogue_id_str = '{:04d}'.format(0)
+            dialogue_dict['dialogue_id'] = f'{file_num}_{dialogue_id_str}'
+            json.dump([dialogue_dict], f, ensure_ascii=False, indent=4)
 
 class SocketManager: # websocket，多人連線對話用
     def __init__(self):

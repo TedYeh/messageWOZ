@@ -3,9 +3,57 @@ let user_name = 'user';
 let dialogue_file_name = 'dialogue_0001';
 let current_dialogue = {'dialogue_id': '', 'services': [], 'turns': []};
 let current_dialogue_turn = 0;
-let current_schema = {};
+let current_schemas = {};
 var hostname = location.hostname;
 const backend_url = "http://"+hostname+":8000";
+
+var dialogue_data = null;
+var loc = window.location.pathname;
+var dir = loc.substring(0, loc.lastIndexOf('/'));
+console.log(loc)
+$(document).ready(function(){
+    // 接收目前使用者訊息，並顯示至Dialogue 視窗中
+    var current_user;
+    $.get("/api/current_user",function(response){
+        current_user = response;
+        $("#profile").text(current_user);
+    });
+    var receiver = "";
+    // create websocket
+    var hostname = location.hostname; // 取得 public ip
+    var socket = new WebSocket("ws://"+hostname+":8000/api/chat"); // 取得websocket，並開始聊天
+    socket.onmessage = function(event) {
+        var parent = $("#messages"); // 取得聊天室窗
+        var data = JSON.parse(event.data); //取得聊天內容
+        dialogue_data = data
+        console.log(data);
+        var sender = data['sender']; // 確認是 SYSTEM or USER
+        if (sender == current_user)
+            sender = "You";
+        var message = data['message'] // 取得聊天訊息
+        // 產生對話框並顯示至視窗上
+        if(sender == "You")
+            var content = "<p class='chat-log_item chat-log_item-own z-depth-0'><strong>"+sender+" </strong> <span> "+message+"</span></p>";
+        else
+            var content = "<p class='chat-log_item chat-log_item z-depth-0'><strong>"+sender+" </strong> <span> "+message+"</span></p>";
+        parent.append(content);
+    };
+
+    // 使用websocket 傳送資料用
+    $("#chat-form").on("submit", function(e){
+        e.preventDefault();
+        var message = $("#chat-form input").val(); // 取得輸入框之訊息
+        if (message){
+            data = {
+                "sender": current_user,
+                "message": message
+            };
+            socket.send(JSON.stringify(data)); // 傳送目前Role和message
+            $("input").val("");
+            document.cookie = 'X-Authorization=; path=/;';
+        }
+    });
+});
 
 // String Format
 if (!String.format) {
@@ -112,18 +160,24 @@ function get_user_state() {
         .then((response) => {
             return response.json();
         }).then((jsonData) => {
-        current_schema = jsonData;
+        current_schemas = jsonData;
         console.log(jsonData);
 
         let i = 0;
         reset_user_state_table();
-        current_schema['slots'].forEach(function (item) {
-            item.forEach(function (new_slot) {
-                add_user_state_row(i, current_schema['service_name'], new_slot['name'], new_slot['possible_values'][0], new_slot['chinese_description']);
+        current_schemas.forEach(function (current_schema) {
+            console.log(current_schema);
+            current_schema['slots'].forEach(function (item) {
+                item.forEach(function (new_slot) {
+                    add_user_state_row(i, current_schema['service_name'], new_slot['name'], new_slot['possible_values'][0], new_slot['chinese_description']);
+                    current_dialogue['services'] = [current_schema['service_name']]
+                });                
             });
+            
             i += 1;
         });
-        current_dialogue['services'] = [current_schema['service_name']]
+        
+        
 
     }).catch((err) => {
         console.log('Error:', err);
@@ -248,11 +302,13 @@ function add_chat_row(chat_num, chat_role, chat_message) {
 function get_user_state_data() {
     // 彙整 User State 表格資料
     let user_state = {}
-    current_schema['slots'].forEach(function (item) {
-        item.forEach(function (current_slot) {
-            const slot_turn_id = parseInt(document.getElementById('turn-' + current_slot['name']).innerText, 10);
-            user_state[slot_turn_id] = {};
-            user_state[slot_turn_id][current_slot['name']] = [document.getElementById('input-' + current_slot['name']).value.trim()];
+    current_schemas.forEach(function (current_schema) {
+        current_schema['slots'].forEach(function (item) {
+            item.forEach(function (current_slot) {
+                const slot_turn_id = parseInt(document.getElementById('turn-' + current_slot['name']).innerText, 10);
+                user_state[slot_turn_id] = {};
+                user_state[slot_turn_id][current_slot['name']] = [document.getElementById('input-' + current_slot['name']).value.trim()];
+            });                
         });
     });
 
