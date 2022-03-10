@@ -119,9 +119,9 @@ function get_user_state() {
         reset_user_state_table();
         current_schema['slots'].forEach(function (item) {
             item.forEach(function (new_slot) {
-                add_user_state_row(i, new_slot['name'], new_slot['possible_values'][0], new_slot['chinese_description']);
+                add_user_state_row(i, current_schema['service_name'], new_slot['name'], new_slot['possible_values'][0], new_slot['chinese_description']);
             });
-            i += 2;
+            i += 1;
         });
         current_dialogue['services'] = [current_schema['service_name']]
 
@@ -141,7 +141,7 @@ function reset_user_state_table() {
     let thead = document.createElement('thead');
     let tbody = document.createElement('tbody');
     let tr = document.createElement('tr');
-    const title_list = ['#', 'Slot', 'Value', 'Description'];
+    const title_list = ['ID', 'Domain', 'Slot', 'Value', 'Description'];
     title_list.forEach(function (item) {
         let th = document.createElement('th');
         th.setAttribute('scope', 'col');
@@ -157,7 +157,7 @@ function reset_user_state_table() {
 }
 
 // 在 User State 表格新增一列 Slot
-function add_user_state_row(slot_num, slot_name, slot_value, slot_description) {
+function add_user_state_row(slot_num, domain, slot_name, slot_value, slot_description) {
     let tbody = document.getElementById('user-state-table').getElementsByTagName('tbody')[0];
     let tree = document.createDocumentFragment();
     let tr = document.createElement('tr');
@@ -169,7 +169,11 @@ function add_user_state_row(slot_num, slot_name, slot_value, slot_description) {
     tr.appendChild(th);
 
     let td = document.createElement('td');
-    td.innerHTML = slot_name;
+    td.innerHTML = domain;
+    tr.appendChild(td);
+
+    td = document.createElement('td');
+    td.innerHTML = slot_name.replace(domain+'-', '');
     tr.appendChild(td);
 
     td = document.createElement('td');
