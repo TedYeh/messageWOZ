@@ -17,7 +17,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # -------------------websocket 多人連線對話部分-------------------
 # locate templates
 templates = Jinja2Templates(directory="templates")
-
+schema_data = ServiceSchema()
 
 @app.get("/") # 主頁(登入頁面)，選擇你要擔任的腳色(SYSTEM、USER)
 def get_home(request: Request): 
