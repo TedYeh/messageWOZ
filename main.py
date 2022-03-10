@@ -13,6 +13,13 @@ import uvicorn
 import glob
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 # -------------------websocket 多人連線對話部分-------------------
 # locate templates
@@ -20,7 +27,7 @@ templates = Jinja2Templates(directory="templates")
 schema_data = ServiceSchema()
 
 @app.get("/") # 主頁(登入頁面)，選擇你要擔任的腳色(SYSTEM、USER)
-def get_home(request: Request): 
+def get_home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 
@@ -87,4 +94,3 @@ async def chat(websocket: WebSocket):
             manager.disconnect(websocket, sender)
             response['message'] = "left"
             await manager.broadcast(response)
-
