@@ -34,6 +34,9 @@
               登入
             </button>
           </form>
+          <button class="mt-3 btn btn-block btn-primary"  @click="onAuthorize">
+              Google 登入
+          </button>
         </div>
       </div>
     </div>
@@ -52,6 +55,11 @@
           error: null
         }
       },
+      mounted() {
+        gapi.signin2.render('google-signin-button', {
+          onsuccess: this.onSignIn
+        })
+      },
       methods: {
         async submit() {
           if (!this.username || !this.password) return
@@ -67,6 +75,9 @@
             this.password = ''
             this.error = err.response ? err.response.data : '未知錯誤'
           }
+        },
+        onAuthorize() {
+          window.location.href = '/services/authorize';
         }
       }
     })

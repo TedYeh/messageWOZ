@@ -24,6 +24,7 @@ class BaseModel(Model):
 class User(BaseModel):
     username = CharField(unique=True)
     password_hash = CharField()
+    google_cridential = JSONField(null=True)
 
     is_admin = BooleanField(default=False)
 
