@@ -3,6 +3,7 @@ flask
 flask-socketio
 flask-admin
 flask-login
+aioflask
 redis
 python-redis-lock
 bcrypt

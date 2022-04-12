@@ -16,6 +16,7 @@ bp = Blueprint('services_bp', __name__)
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account and requires requests to use an SSL connection.
 SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/userinfo.email',
           'https://www.googleapis.com/auth/calendar',
           'https://www.googleapis.com/auth/gmail.send',
           'https://www.googleapis.com/auth/gmail.readonly'
@@ -163,6 +164,7 @@ async def get_user_info(credentials):
     """
     user_info_service = googleapiclient.discovery.build(
         'oauth2', 'v2', credentials=credentials)
+
     return user_info_service.userinfo().get().execute()
 
 
