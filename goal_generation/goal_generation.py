@@ -30,10 +30,10 @@ id = 0
 
 class GoalGenerator:
     @staticmethod
-    def generate():
+    def generate(single_domain=False, cross_domain=True, multi_target=True):
         goal_list = generate_method(
             database_dir=os.path.abspath(os.path.join(os.path.abspath(__file__),'../../data/crosswoz/database/')),
-            single_domain=False, cross_domain=True, multi_target=False
+            single_domain=single_domain, cross_domain=cross_domain, multi_target=True
         )
         #goal_list = goals_reorder(goal_list)
         #print('goal_list', goal_list)
@@ -74,12 +74,14 @@ class SingleDomainGenerator():
             random.shuffle(self.generators)
             for generator in self.generators:
                 # 多领域单独生成，每个领域中目标以一定概率独立生成
-                if random.random() < 0.8:
+                if len(goal) == goal_max:
+                        break
+                if random.random() < 0.55:
                     goal.append(generator.generate(call_count()))
-                    # 多领域多目标生成，控制总数不超过5
+                    # 多领域多目标生成，控制总数不超过3
                     if len(goal) == goal_max:
                         break
-                    if multi_target and random.random() < 0.2:
+                    if multi_target and random.random() < 0.15:
                         goal.append(generator.generate(call_count()))
 
             if len(goal) == 0:
@@ -98,7 +100,7 @@ class CrossDomainGenerator():
         transfer probabolity matrix 
         [hotel attraction restaurant] to [do-not-trans hotel attraction restaurant]
         '''
-        self.trans_matrix = [[0, 0.45, 0.45], [0.3, 0.3, 0.3], [0.3, 0.3, 0.3]]
+        self.trans_matrix = [[0.3, 0.45, 0.45], [0.3, 0.3, 0.3], [0.3, 0.3, 0.3]]
 
     def generate(self, exist_goal):
         goal = []
@@ -112,21 +114,29 @@ class CrossDomainGenerator():
         trans_exist = [-1, -1, -1]
         exist_goal_required_info = exist_goal["需求訊息"]
         for item in exist_goal_required_info:
-            if item[0] == "郵件主旨" or item[0] == "名稱":
+            if item[0] == "名稱":
                 trans_exist[0] = 1
-            if item[0] == "收件者" or item[0] == "參加者":
+            if item[0] == "郵件主旨":
                 trans_exist[1] = 1
-            if item[0] == "使用者" or item[0] == "收件者":
+            if item[0] == "收件者" or item[0] == "寄件者":
                 trans_exist[2] = 1
-        #print(trans_exist)
+        #print('exist_goal', exist_goal)
         #print(self.trans_matrix[index][0] * trans_exist[0])
         #print(self.trans_matrix[index][1] * trans_exist[1])
-        if random.random() < self.trans_matrix[index][0] * trans_exist[0]:
+        mail = random.random()
+        if mail < self.trans_matrix[index][0] * trans_exist[0]:
             goal.append(self.generators[0].generate(call_count(), exist_goal))
-        if random.random() < self.trans_matrix[index][1] * trans_exist[1]:
+            #print("Gmail", mail, self.trans_matrix[index][0], trans_exist[0])
+
+        calendar = random.random()
+        if calendar < self.trans_matrix[index][1] * trans_exist[1]:
             goal.append(self.generators[1].generate(call_count(), exist_goal))
-        if random.random() < self.trans_matrix[index][2] * trans_exist[2]:
+            #print("Calendar", calendar, self.trans_matrix[index][1], trans_exist[1])
+
+        message = random.random()
+        if message < self.trans_matrix[index][2] * trans_exist[2]:
             goal.append(self.generators[2].generate(call_count(), exist_goal))
+            #print("Message", message, self.trans_matrix[index][2], trans_exist[2])
         
         return goal
 

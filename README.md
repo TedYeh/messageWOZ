@@ -72,18 +72,30 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 
 提示：若在本地端 (http://localhost:5000) 測試此系統，可以使用 Chrome 的無痕視窗同時登入兩個帳號。
 
-<img src="img/match.png" alt="drawing" style="width:70%;"/>
+<img src="img/match.png" alt="match" style="width:70%;"/>
 
 
 
-各對話頁面及設計請參考[標註系統操作說明](MessageWOZ資料標註系統操作說明.pdf) `data_labeling/templates` 目錄下的`.html`。
+各對話頁面及設計請參考[MessageWOZ資料標註系統操作說明.pdf](MessageWOZ資料標註系統操作說明.pdf) 及 `data_labeling/templates` 目錄下的`.html`。
 
-管理员可以在后台导入预先定义的任务，导出对话数据。
-
-导入任务的步骤是：在 Result Files 选项卡下，进入 inputs 目录，上传任务定义文件 tasks.json，再回到管理首页，点导入按钮。导入成功后，系统会告知导入成功的任务数量。此时也可以到 Task 选项卡查看详情。
-
-导出数据直接在管理首页点下载全部即可。
-
-### Admin
+### Admin(管理員)
 
 帳號名稱：root，密碼：root
+
+登入後即進入管理員介面(控制台) 
+<img src="img/admin.png" alt="admin" style="width:70%;"/>
+
+管理員可以在控制台導入預先定義的任務，並導出已完成的對話。
+
++ 導入任務步驟
+    1. 選擇 `Result Files` 分頁，並進入 `inputs` 目錄，上傳任務定義文件 `tasks.json`。
+    <img src="img/result_file.png" alt="result_file" style="width:70%;"/>
+
+    2. 再回到管理首頁，點擊`點此導入`連結導入任務。若導入成功，系統會告知導入成功的任務數量。
+    <img src="img/import.png" alt="import" style="width:70%;"/>
+
+    3. 可到 `Task` 分頁查看詳細的任務敘述。
+    <img src="img/task.png" alt="task" style="width:70%;"/>
+
++ 導出對話
+    1. 在首頁點選`點此導出`即可導出已完成任務對話。

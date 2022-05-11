@@ -17,8 +17,6 @@ class SentenceGenerator:
         for goal in goals:
             # print(goal)
             sen = ''
-            # if "周边" in goal["生成方式"]:
-            #     sen += goal["生成方式"] + "。" + "通过它的周边推荐，"
             domain = goal["領域"]
             if domain == "Gmail":
                 for constraint in goal["約束條件"]:
@@ -38,19 +36,6 @@ class SentenceGenerator:
                         sen += "你要寄一封信(id=%d)。" % goal['id']
                     else: sen += "你要找一封信(id=%d)。" % goal['id']
 
-                #for constraint in goal["约束条件"]:
-                #    if constraint[0] == "酒店类型":
-                #        sen += ('你希望酒店是%s的。' % constraint[1])
-                #    elif "酒店设施" in constraint[0]:
-                #        sen += ('你希望酒店提供%s。' % constraint[0].split('-')[1])
-                #    elif constraint[0] == "价格":
-                #        sen += ('你希望酒店的最低价格是%s的。' % constraint[1])
-                #    elif constraint[0] == "评分":
-                #        sen += ('你希望酒店的评分是%s。' % constraint[1])
-                #    elif constraint[0] == "预订信息":
-                #        sen += ""
-                # if goal["预订信息"]:
-                #     sen += "你希望预订在%s入住，共%s人，住%s天。" % (goal["预订信息"][1][1], goal["预订信息"][0][1], goal["预订信息"][2][1])
             elif domain == "Calendar":
                 for constraint in goal["約束條件"]:
                     if constraint[0] == "名稱":
@@ -71,11 +56,6 @@ class SentenceGenerator:
                 for constraint in goal["約束條件"]:
                     if constraint[0] == "是否全天":
                         sen += ('你希望這個活動%s全天的。' % ('是' if constraint[1]=='是' else '不是'))
-                        #print(sen)
-                #    elif constraint[0] == "游玩时间":
-                #        sen += ('你希望游玩的时长是%s。' % constraint[1])
-                #    elif constraint[0] == "评分":
-                #        sen += ('你希望景点的评分是%s。' % constraint[1])
             elif domain == "Message":
                 for constraint in goal["約束條件"]:
                     if constraint[0] == "使用者":
@@ -89,26 +69,7 @@ class SentenceGenerator:
                 if sen == '':
                     if goal['動作'] == '寄一則訊息':
                         sen += "你要寄一則訊息(id=%d)。" % goal['id']
-            #    for constraint in goal["约束条件"]:
-            #        if constraint[0] == "名称":
-            #            if '周边' in constraint[1]:
-            #                origin_id = int(constraint[1].split('id=')[1][0])
-            #                sen += ('你要去id=%d附近的餐馆(id=%d)用餐。' % (origin_id, goal['id']))
-            #            else:
-            #                sen += ('你要去名叫%s的餐馆(id=%d)用餐。' % (constraint[1], goal['id']))
-            #    if sen == '':
-            #        sen += "你要去一个餐馆(id=%d)用餐。" % goal['id']
-#
-            #    for constraint in goal["约束条件"]:
-            #        if constraint[0] == "推荐菜":
-            #            sen += ('你想吃的菜肴是%s。' % '、'.join(constraint[1]))
-            #        elif constraint[0] == "人均消费":
-            #            sen += ('你希望餐馆的人均消费是%s的。' % constraint[1])
-            #        elif constraint[0] == "评分":
-            #            sen += ('你希望餐馆的评分是%s。' % constraint[1])
-                # if goal["预订信息"]:
-                #     sen += "你希望预订在%s%s共%s人一起用餐。" % (goal["预订信息"][1][1], goal["预订信息"][2][1], goal["预订信息"][0][1])
-             
+            
             if domain == 'Gmail': d = '郵件'
             elif domain == 'Calendar': d = '活動' 
             else: d = '訊息'
@@ -128,9 +89,10 @@ class SentenceGenerator:
 if __name__ == "__main__":
     sg = {'領域':'', 'id':None, '約束條件':[], "需求訊息":[], '生成方式':'' }
     goals = []
-    for i in range(1, 100+1):
+
+    for i in range(1, 20+1):
         main_goal = {'goals':[], "description":[], "timestamp":'', "ID":None}
-        semantic_tuples, goal_list = GoalGenerator.generate()    
+        semantic_tuples, goal_list = GoalGenerator.generate(single_domain=False, cross_domain=True, multi_target=True)    
         #print(goal_list)
         sens = SentenceGenerator().generate(goal_list)
         for goal in goal_list:
@@ -141,8 +103,10 @@ if __name__ == "__main__":
         main_goal['ID'] = i
         goals.append(main_goal)
         pprint(main_goal)
+    
+    random.shuffle(goals)
     json_object = json.dumps(goals, indent = 4)
   
     # Writing to sample.json
-    with open("goal_example.json", "w") as outfile:
+    with open("goal_task.json", "w") as outfile:
         outfile.write(json_object)
