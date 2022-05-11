@@ -5,6 +5,7 @@ import numpy as np
 import json
 import datetime
 from goal_generation import GoalGenerator
+import argparse
 
 class SentenceGenerator:
     def generate(self, goals, random_seed=None):
@@ -87,10 +88,13 @@ class SentenceGenerator:
         return sens
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--num', type=int, default=100)
+    args = parser.parse_args()
     sg = {'領域':'', 'id':None, '約束條件':[], "需求訊息":[], '生成方式':'' }
     goals = []
 
-    for i in range(1, 20+1):
+    for i in range(args.num):
         main_goal = {'goals':[], "description":[], "timestamp":'', "ID":None}
         semantic_tuples, goal_list = GoalGenerator.generate(single_domain=False, cross_domain=True, multi_target=True)    
         #print(goal_list)
@@ -105,8 +109,7 @@ if __name__ == "__main__":
         pprint(main_goal)
     
     random.shuffle(goals)
-    json_object = json.dumps(goals, indent = 4)
+    json_object = json.dumps(goals, indent = 4, ensure_ascii=False)
   
     # Writing to sample.json
-    with open("goal_task.json", "w") as outfile:
-        outfile.write(json_object)
+    with open("goal_task.json", "w", encoding='utf-8') as f:json.dump(data, f, indent = 5, ensure_ascii=False)
