@@ -84,22 +84,22 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 
 登入後即進入管理員介面(控制台) 
 
-<img src="img/admin.png" alt="admin" style="width:70%;"/>
+<img src="img/admin.png" alt="admin" style="width:110%;"/>
 
 管理員可以在控制台導入預先定義的任務，並導出已完成的對話。
 
 + 導入任務步驟
     1. 選擇 `Result Files` 分頁，並進入 `inputs` 目錄，上傳任務定義文件 `tasks.json`。
 
-    <img src="img/result_file.png" alt="result_file" style="width:70%;"/>
+    <img src="img/result_file.png" alt="result_file" style="width:110%;"/>
 
     2. 再回到管理首頁，點擊`點此導入`連結導入任務。若導入成功，系統會告知導入成功的任務數量。
 
-    <img src="img/import.png" alt="import" style="width:70%;"/>
+    <img src="img/import.png" alt="import" style="width:110%;"/>
 
     3. 可到 `Task` 分頁查看詳細的任務敘述。
-    
-    <img src="img/task.png" alt="task" style="width:70%;"/>
+
+    <img src="img/task.png" alt="task" style="width:110%;"/>
 
 + 導出對話
     1. 在首頁點選`點此導出`即可導出已完成任務對話。
