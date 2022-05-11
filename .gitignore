@@ -5,7 +5,6 @@
 __pycache__
 
 venv
-.env
 .flaskenv
 
 .idea
@@ -16,5 +15,3 @@ venv
 data_labelling/settings.py
 data_labelling/results/**/*.json
 data_labelling/results/**/all.zip
-
-client_secret.json

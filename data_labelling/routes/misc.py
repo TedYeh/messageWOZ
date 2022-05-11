@@ -35,7 +35,7 @@ def num_tasks_unfinished():
 @bp.route('/import-all', methods=['POST'])
 @admin_required
 def import_all():
-    basepath = os.path.join(os.getcwd(), 'data_labelling\\results\\input')
+    basepath = './data_labelling/results/input'
     count = 0
     
     def import_one(path):
@@ -47,9 +47,9 @@ def import_all():
         def f(options):
             items = []
             for goal in options['goals']:
-                field = goal['领域']
+                field = goal['領域']
                 _id = goal['id']
-                kv = goal.get('约束条件', []) + goal.get('需求信息', []) + goal.get('预订信息', [])
+                kv = goal.get('約束條件', []) + goal.get('需求訊息', []) + goal.get('預訂訊息', [])
                 for k, v in kv:
                     items.append([_id, field, k, v])
             options['items'] = items

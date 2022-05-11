@@ -1,7 +1,13 @@
 import json
 data = {}
-with open('4.json', 'r', encoding='utf-8') as json_file:
+with open('tasks.json', 'r', encoding='utf-8') as f:
+    tasks = json.loads(f.read())
+    print(tasks[1]['description'])
+
+with open('7.json', 'r', encoding='utf-8') as json_file:
     results = json.loads(json_file.read())
+    print(results)
+    '''
     for res in results:
         for key, value in res.items():
             if key == 'task':
@@ -27,3 +33,4 @@ with open('4.json', 'r', encoding='utf-8') as json_file:
                     data[file_id]['message'].append(tmp_dict)
     print(json.loads(json.dumps(data, indent = 5)))
 with open('out.json', 'w') as f:json.dump(data, f, indent = 5)
+'''
