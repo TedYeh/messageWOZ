@@ -64,8 +64,12 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 
 <h3 id="Login">Login</h3>
 運行系統後，會進入到登入畫面
+可進行普通用戶登入或Google用戶登入
 
 <img src="img/login.png" alt="login" style="width:50%;"/>
+
+選擇 **`Google 登入`** 來讀取Gmail、Calendar等資訊
+> 若要更改為其他GCP網域，請修改 `data_labeling/routes` 目錄中的 `gcalendar.py`、`gmail.py` 及 `services.py`
 
 <h3 id="Register">Register</h3>
 
