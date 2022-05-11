@@ -12,7 +12,7 @@
       <li><strong>註冊邀請碼</strong>: {{ g.invitation_code }}</li>
       <li><strong>導入任務</strong>: 請將任務配置文件(json 格式)上傳至 input 文件夾，導入完成後这些文件將被刪除。<a v-if="!running" href="javascript:void(0)" @click="importAll">點此導入</a></li>
       <li><strong>導出數據</strong>: 所有數據將被導出至 output 文件夾，按照導入順序作為 ID 每 100 個形成一個文件。<a v-if="!running" href="javascript:void(0)" @click="exportAll">點此導出</a> <a v-if="!running" href="javascript:void(0)" @click="download">下載全部</a></li>
-      <li><strong>刪除未標技任務</strong>: <a v-if="!running" href="javascript:void(0)" @click="removeWaitingTasks">點此執行</a> </li>
+      <li><strong>刪除未標記任務</strong>: <a v-if="!running" href="javascript:void(0)" @click="removeWaitingTasks">點此執行</a> </li>
       <li v-if="!running" class="text-muted" style="list-style: none">沒有正在執行的管理操作</li>
       <li v-show="running" class="text-warning" style="display: none; list-style: none">正在執行管理操作: <span v-text="running"></span></li>
     </ul>

@@ -47,7 +47,7 @@ class RoomView(MyModelView):
 load_dotenv()
 
 admin = Admin(
-    name='任务导向对话系统· 管理界面',
+    name='MessageWOZ-Dashboard',
     template_mode='bootstrap3',
     index_view=MyIndexView()
 )

@@ -1,45 +1,78 @@
-# A Data Labelling System for CoAI Lab, May 2019
+# 多領域任務導向用戶語音助理對話收集系統
 
-## Requirements
+## Environment setup
 
-* python3.6
+### Requirements
+* python >= 3.6
 
-## Development Startup
+### Development Startup
 
-Copy `.env.example` to `.env`, `settings.example.py` to `settings.py` and update them with local config.
-
-Run the following command and visit http://localhost:5000.
-
+Before clone this repo, you need to install Redis on PC(Linux-Ubuntu)
 ```bash
-# install dependencies
-pip install -r requirements.txt
+# download redis package
+curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
 
-# initialize the database
-python resetdb.py
+echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
 
-# start the server
-python run.py
+sudo apt-get update
+
+# the redis will running when it is installed successfully
+sudo apt-get install redis
 ```
 
-## Deployment Instruction
 
-You can use exactly same steps as development startup.
+Run the following command and visit http://0.0.0.0:5000 (boardcast).
+
+```bash
+# clone the repo in branch GCPlogin
+git clone -b GCPlogin --single-branch https://github.com/TedYeh/messageWOZ.git
+
+# change the directory 
+cd messageWOZ
+
+# install dependencies
+python3 -m pip install -r requirements.txt
+
+# initialize the database
+python3 resetdb.py
+
+# start the server
+python3 run.py
+```
+Or you can change the code 
+```python
+socket_io.run(app, host='0.0.0.0', port=5000)
+```
+to
+```python
+socket_io.run(app, host='127.0.0.1', port=5000)
+```
+in `data_labeling/__init__.py` to run the system in your localhost.
 
 ## 操作指南
 
-启动服务器以后，可以使用默认管理员账户登录。
+### Login
+運行系統後，會進入到登入畫面
 
-用户名：root
 
-密码：root
 
-若要进入普通用户界面，请点击注册链接，使用邀请码注册。
+<img src="img/login.png" alt="login" style="width:50%;"/>
 
-当前邀请码为 `959592`，可以修改 `data_labelling/app.py` 的 `invitation_code`。
 
-普通用户登录后，进入对话匹配界面，匹配需要**至少有一人选择系统端，一人选择用户端**，此时系统会自动完成匹配，两人进入对话界面。
+### Register
 
-提示：如果在本地测试功能，可以使用 Chrome 的无痕窗口同时登录两个用户。
+若要使用普通用戶登入，點選`沒有帳號？點此註冊`來註冊帳號。
+
+邀請碼為 `959592`，可以修改 `data_labelling/app.py` 的 `invitation_code`。
+
+<img src="img/register.png" alt="register" style="width:50%;"/>
+
+### Match
+使用普通用戶才可進入對話匹配介面，進入介面後有**至少有一人選擇系統(助理)端，一人選擇用戶(使用者)端**，此时系統便會自動完成配對並進入對話介面。
+
+提示：若在本地端(http://localhost:5000)測試此系統，可以使用 Chrome 的無痕視窗同時登入兩個帳號。
+
+<img src="img/match.png" alt="drawing" style="width:70%;"/>
 
 在对话界面，用户端先开始对话，以一问一答的方式进行。某一方发送消息后，另一方可以立即看到，但是只有当前者完成必要的信息标注后，后者才可以发送消息。
 
@@ -51,4 +84,6 @@ You can use exactly same steps as development startup.
 
 导出数据直接在管理首页点下载全部即可。
 
+### Admin
 
+帳號名稱：root，密碼：root
