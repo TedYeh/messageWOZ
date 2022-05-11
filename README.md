@@ -70,13 +70,13 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 ### Match
 使用普通用戶才可進入對話匹配介面，進入介面後有**至少有一人選擇系統(助理)端，一人選擇用戶(使用者)端**，此时系統便會自動完成配對並進入對話介面。
 
-提示：若在本地端(http://localhost:5000)測試此系統，可以使用 Chrome 的無痕視窗同時登入兩個帳號。
+提示：若在本地端 (http://localhost:5000) 測試此系統，可以使用 Chrome 的無痕視窗同時登入兩個帳號。
 
 <img src="img/match.png" alt="drawing" style="width:70%;"/>
 
-在对话界面，用户端先开始对话，以一问一答的方式进行。某一方发送消息后，另一方可以立即看到，但是只有当前者完成必要的信息标注后，后者才可以发送消息。
 
-对话页面相关逻辑参见 `templates` 目录下的文件。
+
+各對話頁面及設計請參考[標註系統操作說明]("MessageWOZ資料標註系統操作說明.pdf") `data_labeling/templates` 目錄下的`.html`。
 
 管理员可以在后台导入预先定义的任务，导出对话数据。
 
