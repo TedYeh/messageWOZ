@@ -1,6 +1,17 @@
 # 多領域任務導向用戶語音助理對話收集系統
 
-## Environment setup
+
+## Outline
+- [環境配置](#Environment-setup): 如何配置此環境
+- [操作指南](#操作指南): 詳細敘述各頁面之操作
+    - [Login](#Login): 登入介面
+    - [Register](#Register): 註冊頁面，註冊帳號
+    - [Match](#Match): 配對介面
+    - [Admin](#Admin(管理員)): 管理後台
+- [任務生成](#Task-Generation): 如何產生任務文件 `task.json` 
+
+
+<h2 id="Environment-setup">Environment setup</h2>
 
 ### Requirements
 * python >= 3.6
@@ -49,17 +60,14 @@ socket_io.run(app, host='127.0.0.1', port=5000)
 ```
 in `data_labeling/__init__.py` to run the system in your localhost.
 
-## 操作指南
+<h2 id="操作指南">操作指南</h2>
 
-### Login
+<h3 id="Login">Login</h3>
 運行系統後，會進入到登入畫面
-
-
 
 <img src="img/login.png" alt="login" style="width:50%;"/>
 
-
-### Register
+<h3 id="Register">Register</h3>
 
 若要使用普通用戶登入，點選`沒有帳號？點此註冊`來註冊帳號。
 
@@ -67,7 +75,8 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 
 <img src="img/register.png" alt="register" style="width:50%;"/>
 
-### Match
+<h3 id="Match">Match</h3>
+
 使用普通用戶才可進入對話匹配介面，進入介面後有**至少有一人選擇系統(助理)端，一人選擇用戶(使用者)端**，此时系統便會自動完成配對並進入對話介面。
 
 提示：若在本地端 (http://localhost:5000) 測試此系統，可以使用 Chrome 的無痕視窗同時登入兩個帳號。
@@ -75,10 +84,9 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 <img src="img/match.png" alt="match" style="width:70%;"/>
 
 
-
 各對話頁面及設計請參考[MessageWOZ資料標註系統操作說明.pdf](MessageWOZ資料標註系統操作說明.pdf) 及 `data_labeling/templates` 目錄下的`.html`。
 
-### Admin(管理員)
+<h3 id="Admin(管理員)">Admin(管理員)</h3>
 
 帳號名稱：root，密碼：root
 
@@ -103,3 +111,17 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 
 + 導出對話
     1. 在首頁點選`點此導出`即可導出已完成任務對話。
+
+<h2 id="Task-Generation">Task Generation</h2>
+
+在 `messageWOZ` 目錄下執行以下指令:
+```bash
+# move to goal_generation directory
+cd goal_generation
+
+# run sentence_generation.py to get {num} of taks
+python3 sentence_generation.py --num 100
+```
+執行指令後便會在 `goal_generation` 目錄下產生 `goal_task.json`
+
+最後進入管理介面即可將 `goal_task.json` 導入系統進行對話。
