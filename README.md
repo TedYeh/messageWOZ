@@ -76,7 +76,7 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 
 
 
-各對話頁面及設計請參考[標註系統操作說明]("MessageWOZ資料標註系統操作說明.pdf") `data_labeling/templates` 目錄下的`.html`。
+各對話頁面及設計請參考[標註系統操作說明](MessageWOZ資料標註系統操作說明.pdf) `data_labeling/templates` 目錄下的`.html`。
 
 管理员可以在后台导入预先定义的任务，导出对话数据。
 
