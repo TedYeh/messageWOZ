@@ -14,7 +14,7 @@
         :ourside="role === {{ role }}"
       />
     </div>
-    <textarea v-model="draft" @keydown.enter="handleEnter" id="chatbox-sender" class="card-footer" spellcheck="false" onkeydown="curDialogue(this.id)"></textarea>
+    <textarea v-model="draft" @keydown.enter="handleEnter" id="chatbox-sender" class="card-footer" spellcheck="false"></textarea>
     <div id="chatbox-footer" class="card-footer d-flex">
       <div v-if="tips" class="text-muted ml-1 my-auto" style="font-size: 14px" v-text="tips"></div>
       {% if role %}
@@ -62,7 +62,7 @@
         lastmsg (nVal, oVal) {
           if (nVal.role === Number('{{ role }}') && !nVal.payload){
             vm2.$data.canSubmit = true
-            vm3.$data.canSubmit = true
+            //vm3.$data.canSubmit = true
           } 
         }
       },

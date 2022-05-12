@@ -12,6 +12,8 @@ app.register_blueprint(misc.bp, url_prefix='')
 app.register_blueprint(room.bp, url_prefix='/room')
 app.register_blueprint(services.bp, url_prefix='/services')
 app.register_blueprint(match.bp, url_prefix='/match')
+app.register_blueprint(gmail.bp, url_prefix='/gmail')
+app.register_blueprint(gcalendar.bp, url_prefix='/gcalendar')
 
 app.config.from_pyfile('settings.py')
 
