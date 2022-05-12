@@ -109,7 +109,7 @@ if __name__ == "__main__":
         pprint(main_goal)
     
     random.shuffle(goals)
-    json_object = json.dumps(goals, indent = 4, ensure_ascii=False)
+    #json_object = json.dumps(goals, indent = 4, ensure_ascii=False)
   
     # Writing to sample.json
-    with open("goal_task.json", "w", encoding='utf-8') as f:json.dump(data, f, indent = 5, ensure_ascii=False)
+    with open("../data_labelling/results/input/goal_task.json", "w", encoding='utf-8') as f:json.dump(goals, f, indent = 5, ensure_ascii=False)
