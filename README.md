@@ -35,11 +35,6 @@ sudo apt-get install redis
 Run the following command and visit http://0.0.0.0:5000 (boardcast).
 
 ```bash
-# setup virtual enviroment
-python3 -m venv messageWOZ
-
-source messageWOZ/bin/activate
-
 # clone the repo in branch GCPlogin
 git clone -b GCPlogin --single-branch https://github.com/TedYeh/messageWOZ.git
 
