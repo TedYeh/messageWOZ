@@ -17,8 +17,7 @@ bp = Blueprint('services_bp', __name__)
 # authenticated user's account and requires requests to use an SSL connection.
 SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
           'https://www.googleapis.com/auth/userinfo.email',
-          'https://www.googleapis.com/auth/calendar',
-          'https://www.googleapis.com/auth/gmail.send',
+          'https://www.googleapis.com/auth/calendar.readonly',
           'https://www.googleapis.com/auth/gmail.readonly'
           ]
 
@@ -146,6 +145,9 @@ async def oauth2callback():
         user = User.create(username=user_info['email'],
                            password_hash=bcrypt.hashpw(str.encode('123456'), bcrypt.gensalt()),
                            google_cridential=credentials_dict)
+    else:
+        # Update user's google_cridential
+        user.updateGoogleCridential(new_google_cridential=credentials_dict)
 
     session['user_id'] = user.id
     session.permanent = True

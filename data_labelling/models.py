@@ -36,6 +36,10 @@ class User(BaseModel):
         self.tasks_done = Room.select().where((Room.status_code == Room.Status.SUCCESS.value) & ((Room.user0 == self) | (Room.user1 == self))).count()
         self.save()
 
+    def updateGoogleCridential(self, new_google_cridential):
+        self.google_cridential = new_google_cridential
+        self.save()
+
 
 class Task(BaseModel):
     content = JSONField()

@@ -32,7 +32,7 @@ class GoalGenerator:
     @staticmethod
     def generate(single_domain=False, cross_domain=True, multi_target=True):
         goal_list = generate_method(
-            database_dir=os.path.abspath(os.path.join(os.path.abspath(__file__),'../../data/crosswoz/database/')),
+            database_dir=os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)),'./database/')),
             single_domain=single_domain, cross_domain=cross_domain, multi_target=True
         )
         #goal_list = goals_reorder(goal_list)

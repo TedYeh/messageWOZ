@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="google-signin-scope" content="profile email">
-  <meta name="google-signin-client_id" content="440271899250-le73l6gnuqh6knno37ld6qcnj2bc144v.apps.googleusercontent.com">
+  <meta name="google-signin-client_id" content="440271899250-bc71l6vb1bosremrab6kmcgeujnq4p6k.apps.googleusercontent.com">
   <title>{% block title %}{% endblock %}</title>
 
   <link href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
@@ -32,6 +33,7 @@
 <script src="{{ url_for('static', filename='js/vue.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/socket.io.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sweetalert2.all.min.js') }}"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"
         integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA=="

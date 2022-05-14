@@ -112,12 +112,12 @@
       },
       mounted () {
         this.update().then(() => (this.initialized = true))
-        const socket = io.connect(`${window.location.origin}/room/{{ room.id }}`)
-        socket.on('connect', () => {
-          console.log('[WS] connected')
+        const socket = io.connect(`${window.location.origin}/room/{{ room.id }}`, {secure:true});
+        socket.on('connect', (socket) => {
+          console.log('[WS] connected', socket)
         })
-        socket.on('disconnect', () => {
-          console.log('[WS] disconnected')
+        socket.on('disconnect', (socket) => {
+          console.log('[WS] disconnected', socket)
         })
         socket.on('update', () => this.update())
         if (!Number('{{ role }}')) {

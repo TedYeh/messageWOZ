@@ -120,21 +120,24 @@ def message_to_format_data(message):
 
     if 'parts' in message['payload']:
         for part in message['payload']['parts']:
-            if part['mimeType'] == 'text/html':
+            if part['mimeType'] == 'text/html' and 'data' in part['body']:
                 # decode the base64 encoded message
                 message_content_html = base64.urlsafe_b64decode(part['body']['data']).decode('utf-8')
                 # remove html tags by beautiful soup
                 message_dict['內容'] = bs4.BeautifulSoup(message_content_html, 'html.parser').get_text()
-            elif part['mimeType'] == 'text/plain':
+            elif part['mimeType'] == 'text/plain' and 'data' in part['body']:
                 # decode the base64 encoded message
-                message_dict['內容'] = base64.urlsafe_b64decode(part['body']['data']).decode('utf-8')
+                try:
+                    message_dict['內容'] = base64.urlsafe_b64decode(part['body']['data']).decode('utf-8')
+                except:
+                    pass
     else:
-        if 'text/html' in message['payload']['mimeType']:
+        if 'text/html' in message['payload']['mimeType'] and 'data' in message['payload']['body']:
             # decode the base64 encoded message
             message_content_html = base64.urlsafe_b64decode(message['payload']['body']['data']).decode('utf-8')
             # remove html tags by beautiful soup
             message_dict['內容'] = bs4.BeautifulSoup(message_content_html, 'html.parser').get_text()
-        elif 'text/plain' in message['payload']['mimeType']:
+        elif 'text/plain' in message['payload']['mimeType'] and 'data' in message['payload']['body']:
             # decode the base64 encoded message
             message_dict['內容'] = base64.urlsafe_b64decode(message['payload']['body']['data']).decode('utf-8')
 

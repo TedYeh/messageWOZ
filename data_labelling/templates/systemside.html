@@ -157,7 +157,8 @@
             },
             'Message': {
               '收件者': { type: 'multiple_in', params: null, checked: false },
-              '傳送內容': { params: null, checked: false }
+              '傳送內容': { params: null, checked: false },
+              '應用程式': { params: null, checked: false }
             }            
           },
           activeField: 'Calendar',
@@ -287,14 +288,30 @@
               this.database[name] = response.data
             })
           }
-          console.log('url', window.location.host)
-          console.log('isexit', this.checkFileExist('http://'+window.location.host+'/gcalendar/gcalendar_db.json'))
           
-          if(this.checkFileExist('http://'+window.location.host+'/gcalendar/gcalendar_db.json'))
-            return Promise.all([
-              f('/gcalendar/gcalendar_db.json', 'Calendar'),
-              f('/gmail/gmail_db.json', 'Gmail'),
+          console.log('url', window.location.host)
+          console.log('calendarisexit', this.checkFileExist(window.location.origin+'/gcalendar/gcalendar_db.json'))
+          console.log('mailisexit', this.checkFileExist(window.location.origin+'/gmail/gmail_db.json'))
+               
+          
+          // && this.checkFileExist(window.location.origin+'/gmail/gmail_db.json')
+          if((this.checkFileExist(window.location.origin+'/gcalendar/gcalendar_db.json')))calendar = f('/gcalendar/gcalendar_db.json', 'Calendar');
+          else calendar = f('/static/data/gcalendar_db.json', 'Calendar');
+          
+          if((this.checkFileExist(window.location.origin+'/gmail/gmail_db.json')))mail = f('/gmail/gmail_db.json', 'Gmail');
+          else mail = f('/static/data/gmail_db.json', 'Gmail');
+          
+          return Promise.all([
+              calendar,
+              mail,
               //f('/static/data/line_db.json', 'Line')
+          ])
+          /*
+          if((this.checkFileExist(window.location.origin+'/gmail/gmail_db.json')))
+            return Promise.all([
+                f('/gcalendar/gcalendar_db.json', 'Calendar'),
+                f('/gmail/gmail_db.json', 'Gmail'),
+                //f('/static/data/line_db.json', 'Line')
             ])
           
           return Promise.all([
@@ -304,6 +321,7 @@
             f('/static/data/gmail_db.json', 'Gmail'),
             //f('/static/data/line_db.json', 'Line')
           ])
+          */
         },
         async submitForm () {
           var tmpArray = Object.entries(this.query[this.activeField]);
