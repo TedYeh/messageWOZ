@@ -111,7 +111,11 @@
         isEmpty: str => /^\s*$/.test(str)
       },
       mounted () {
+        console.log('this.isInMyTurn',this.isInMyTurn)
+        
+        console.log('this.locking',this.locking)
         this.update().then(() => (this.initialized = true))
+        console.log('this.initialized',this.initialized)
         const socket = io.connect(`${window.location.origin}/room/{{ room.id }}`, {secure:true});
         socket.on('connect', (socket) => {
           console.log('[WS] connected', socket)

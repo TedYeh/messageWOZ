@@ -37,7 +37,8 @@ class User(BaseModel):
         self.save()
 
     def updateGoogleCridential(self, new_google_cridential):
-        self.google_cridential = new_google_cridential
+        #self.google_cridential = new_google_cridential
+        self.google_cridential.update({k: v for k, v in new_google_cridential.items() if v!=None})
         self.save()
 
 

@@ -69,7 +69,7 @@ class GmailGenerator:
 
 class MessageGenerator:
     def __init__(self):
-        self.all_attrs = ['使用者', '訊息']
+        self.all_attrs = ['使用者', '訊息', '應用程式']
         self.actions = ['create']
 
     def generate(self, goal_num=0, exist_goal=None, random_seed=None):
@@ -92,11 +92,13 @@ class MessageGenerator:
             goal['生成方式'] = 'id={}裡的{}'.format(exist_goal["id"], "郵件")
             goal['約束條件'].append(['使用者', '出現在id={}的{}裡'.format(exist_goal["id"], "郵件")])
             goal['需求訊息'].append(['訊息', ""])
+            goal['需求訊息'].append(['應用程式', ""])
             name_flag = True
         else:
             goal['生成方式'] = '單領域生成'
             goal['需求訊息'].append(['使用者', ""])
             goal['需求訊息'].append(['訊息', ""])
+            goal['需求訊息'].append(['應用程式', ""])
 
         return goal
 

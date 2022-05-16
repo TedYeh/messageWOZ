@@ -18,7 +18,7 @@ from gmail_generator import GmailGenerator, MessageGenerator
 
 domains = ['活動', '郵件', '訊息']
 actions = ['search', 'create']
-slots = {'活動':['名稱', '時間', '參加者', '內容', '地點'], '郵件':['收件者', '寄件者', '主旨', '內容'], '訊息':['收件者', '內容']} 
+slots = {'活動':['名稱', '時間', '參加者', '內容', '地點'], '郵件':['收件者', '寄件者', '主旨', '內容'], '訊息':['收件者', '內容', '應用程式']} 
 domain_types = ['單領域', '多領域']
 goal_num = 0
 goal_max = 3

@@ -21,7 +21,7 @@ def enter_queue(role):
     if match_making.add_user(g.me.id, role):
         return 'OK'
     else:
-        return '用户已经在队列中', 400
+        return '用戶已經在佇列中', 400
 
 
 @bp.route('/quit-queue', methods=['POST'])
@@ -34,7 +34,7 @@ def quit_queue():
         match_making.free_user(uid)
         return 'OK'
     else:
-        return '用户不在队列中', 400
+        return '用戶不在佇列中', 400
 
 
 @bp.route('/num-waiting')
@@ -63,6 +63,6 @@ def get_room():
                 'role': role
             })
         except:
-            return '房间不存在', 400
+            return '房間不存在', 400
 
     return '204', 204

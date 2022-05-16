@@ -29,7 +29,7 @@
             <i class="fas fa-desktop fa-8x"></i>
           </button>
           <p>
-            當前等待人數：<span id="num_waiting_0"></span>
+            當前等待人數：<span id="num_waiting_1"></span>
           </p>
         </div>
         <div class="col-6 text-center">
@@ -38,7 +38,7 @@
             <i class="fas fa-user fa-8x"></i>
           </button>
           <p>
-            當前等待人數：<span id="num_waiting_1"></span>
+            當前等待人數：<span id="num_waiting_0"></span>
           </p>
         </div>
       </div>
@@ -63,8 +63,8 @@
           alert('沒有未完成的任務！');
           return
         }
-        role = 0;
-        axios.post('enter-queue/0')
+        role = 1;
+        axios.post('enter-queue/1')
           .then(function (res) {
             console.log(res);
           })
@@ -81,8 +81,8 @@
           alert('沒有未完成的任務！');
           return
         }
-        role = 1;
-        axios.post('enter-queue/1')
+        role = 0;
+        axios.post('enter-queue/0')
           .then(function (res) {
             console.log(res);
           })

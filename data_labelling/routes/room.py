@@ -27,7 +27,7 @@ def post_message_content(room, role):
         data = json.loads(data)
         content = data['content']
     except:
-        return '格式错误', 400
+        return '格式錯誤', 400
     try:
         lastmsg = Message.select().where(Message.room == room).order_by(-Message.id).first()
         if lastmsg.role == role:

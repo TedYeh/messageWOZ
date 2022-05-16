@@ -3,9 +3,9 @@
 {% import 'chatbox.html' as chatbox %}
 {% import 'systemside.html' as systemside %}
 {% import 'clientside.html' as clientside %}
-{% set ourside = clientside if role else systemside %}
+{% set ourside = systemside if role else clientside %}
 
-{% block title %} 任務 - {{ '用戶' if role else '系統' }}端 {% endblock %}
+{% block title %} 任務 - {{ '系統' if role else '用戶'}}端 {% endblock %}
 
 {% block content %}
   <div style="height: 85%">
