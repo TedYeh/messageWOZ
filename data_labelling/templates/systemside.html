@@ -360,7 +360,7 @@
           this.syncLastResult()
           try {
             console.log('JSON.parse(JSON.stringify(this.history))', JSON.parse(JSON.stringify(this.history)))
-            await axios.post(`/room/{{ room.id }}/0/message/payload`, {
+            await axios.post(`/room/{{ room.id }}/1/message/payload`, {
               payload: this.history
             })
             

@@ -118,7 +118,7 @@
             }
           try {
             // console.log(JSON.parse(JSON.stringify(this.items)))
-            await axios.post(`/room/{{ room.id }}/1/message/payload`, {
+            await axios.post(`/room/{{ room.id }}/0/message/payload`, {
               payload: this.items
             })
             this.items.forEach(item => Vue.set(item, 4, false))
