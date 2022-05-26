@@ -81,7 +81,13 @@
             <input v-model="item.params" class="form-control form-control-sm">
           </div>
         </div>
-        <span v-if="activeField != 'Message'"><button class="btn btn-primary btn-block" @click="submit" :disabled="locking">查詢</button></span>
+        <span v-if="activeField != 'Message'">
+          <button v-if="canSearch" class="btn btn-primary btn-block" @click="submit" :disabled="locking">查詢</button>
+          <button v-else class="btn btn-primary btn-block" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            資料下載中...
+          </button>
+        </span>
       </div>
     </div>
   </div>
@@ -166,7 +172,10 @@
           history: [],
           database: {},
           locking: false,
-          initialized: false
+          initialized: false,
+          isLoadCalender: false,
+          isLoadMail: false,
+          canSearch: false,
         }
       },
       methods: {
@@ -282,49 +291,44 @@
                 return true;
             }
         },
-        async loaddb () {          
+        async loadCalendar() {
           const f = (path, name) => {
             return axios.get(path).then(response => {
               this.database[name] = response.data
             })
           }
-          
-          console.log('url', window.location.host)
-          console.log('calendarisexit', this.checkFileExist(window.location.origin+'/gcalendar/gcalendar_db.json'))
-          console.log('mailisexit', this.checkFileExist(window.location.origin+'/gmail/gmail_db.json'))
-               
-          
-          // && this.checkFileExist(window.location.origin+'/gmail/gmail_db.json')
-          if((this.checkFileExist(window.location.origin+'/gcalendar/gcalendar_db.json')))calendar = f('/gcalendar/gcalendar_db.json', 'Calendar');
-          else calendar = f('/static/data/gcalendar_db.json', 'Calendar');
-          
-          if((this.checkFileExist(window.location.origin+'/gmail/gmail_db.json')))mail = f('/gmail/gmail_db.json', 'Gmail');
-          else mail = f('/static/data/gmail_db.json', 'Gmail');
-          
-          return Promise.all([
-              calendar,
-              mail,
-              //f('/static/data/line_db.json', 'Line')
-          ])
-          /*
-          if((this.checkFileExist(window.location.origin+'/gmail/gmail_db.json')))
-            return Promise.all([
-                f('/gcalendar/gcalendar_db.json', 'Calendar'),
-                f('/gmail/gmail_db.json', 'Gmail'),
-                //f('/static/data/line_db.json', 'Line')
-            ])
-          
-          return Promise.all([
-            //f('/gcalendar/gcalendar_db.json', 'Calendar'),
-            //f('/gmail/gmail_db.json', 'Gmail'),
-            f('/static/data/gcalendar_db.json', 'Calendar'),
-            f('/static/data/gmail_db.json', 'Gmail'),
-            //f('/static/data/line_db.json', 'Line')
-          ])
-          */
+
+          calendar = f('/gcalendar/gcalendar_db.json', 'Calendar')
+            .then(() => {      
+            })
+            .catch(() => {
+              calendar = f('/static/data/gcalendar_db.json', 'Calendar')
+            })
+            .finally(() => {
+              this.isLoadCalender = true
+              if (this.isLoadCalender && this.isLoadMail) this.canSearch = true
+            })
+        },
+        async loadGmail() {
+          const f = (path, name) => {
+            return axios.get(path).then(response => {
+              this.database[name] = response.data
+            })
+          }
+
+          mail = f('/gmail/gmail_db.json', 'Gmail')
+            .then(() => {
+            })
+            .catch(() => {
+              calendar = f('/static/data/gmail_db.json', 'Gmail')
+            })
+            .finally(() => {
+              this.isLoadMail = true
+              if (this.isLoadCalender && this.isLoadMail) this.canSearch = true
+            })
         },
         async submitForm () {
-          var tmpArray = Object.entries(this.query[this.activeField]);
+          var tmpArray = Object.entries(this.query[this.activeField])
           console.log('tmpArray', tmpArray)
           console.log('this.query[this.activeField]',this.query[this.activeField], tmpArray.filter(([key, value]) => value.checked).length)
           if (!this.canSubmit) return
@@ -381,7 +385,6 @@
           
       },
       mounted () {
-        
         if (window.localStorage['systemsideData{{ room.id }}']) {
           const data = JSON.parse(window.localStorage['systemsideData{{ room.id }}'])
           console.log('data', data)
@@ -392,9 +395,12 @@
         }
         
         this.initialized = true
-        this.loaddb()
+        setTimeout(() => {
+          this.loadCalendar()
+          this.loadGmail()
+        },100)
+
         setInterval(() => {
-          // console.log(this.history.length)
           window.localStorage['systemsideData{{ room.id }}'] = JSON.stringify({
             activeField: this.activeField,
             query: this.query,

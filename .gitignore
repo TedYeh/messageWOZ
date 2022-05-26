@@ -17,4 +17,4 @@ data_labelling/results/**/*.json
 data_labelling/results/**/all.zip
 server.crt
 server.key
-ssl.config
+ssl.conf

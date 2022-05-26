@@ -44,6 +44,28 @@ def get_mails():
     return json.dumps(message_list, ensure_ascii=False, indent=4), 200, {'Content-Type': 'application/json'}
 
 
+@bp.route('/id_list', methods=['GET'])
+@login_required
+def get_mail_id_list():
+    """ Get mail id list from gmail account.
+
+    Args:
+      None
+
+    Returns:
+      json: json object with mail id.
+    """
+    max_results = 50
+
+    # Get the user's google credentials from database
+    credentials = get_credentials()
+
+    # Get the user's email id list from gmail API
+    service = googleapiclient.discovery.build('gmail', 'v1', credentials=credentials)
+    message_id_list = service.users().messages().list(userId='me', labelIds=['INBOX'], maxResults=max_results).execute()
+    return json.dumps(message_id_list, ensure_ascii=False, indent=4), 200, {'Content-Type': 'application/json'}
+
+
 @bp.route('/sent', methods=['POST'])
 @login_required
 def sent_mail():
@@ -153,15 +175,20 @@ def split_name_and_address(name_and_address):
     Returns:
       A list containing the [NAME, ADDRESS], if the name_and_address only contains ADDRESS, return [None, ADDRESS]
     """
-    def split_address_to_list(addrss):
-        addrss = addrss.replace('"', '')
-        addrss = addrss.replace('<', '')
-        addrss = addrss.replace('>', '')
-        addrss = addrss.split(' ')
-        if len(addrss) == 1:
-            return ["", addrss[0]]
+    def split_address_to_list(address):
+        split_result = re.split('\'|"|<|>', address)
+        split_result = [item.strip() for item in split_result]
+        split_result = list(filter(lambda a: len(a) > 0, split_result))
+        
+        if len(split_result) == 1:
+            if (bool(re.search('@', split_result[0]))):
+                return ["", split_result[0]]
+            else:
+                return [split_result[0], ""]
+        elif len(split_result) > 0:
+            return [split_result[0], split_result[1]]
         else:
-            return addrss
+            return ["", ""]
 
     result = []
     name_and_address_list = name_and_address.split(',')
