@@ -123,7 +123,7 @@ in `data_labeling/__init__.py` to run the system in your localhost.
 # move to goal_generation directory
 cd goal_generation
 
-# run sentence_generation.py to get {num} of taks
+# run sentence_generator.py to get {num} of taks
 python3 sentence_generation.py --num 100
 ```
 執行指令後便會在 `goal_generation` 目錄下產生 `goal_task.json`
