@@ -29,6 +29,9 @@ sudo apt-get update
 
 # the redis will running when it is installed successfully
 sudo apt-get install redis
+
+# start redis server
+/etc/init.d/redis-server start
 ```
 
 
