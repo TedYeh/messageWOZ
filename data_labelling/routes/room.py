@@ -31,9 +31,9 @@ def post_message_content(room, role):
     try:
         lastmsg = Message.select().where(Message.room == room).order_by(-Message.id).first()
         if lastmsg.role == role:
-            return '不得连续两次发送消息', 403
+            return '不得連續兩次發送消息', 403
         elif not lastmsg.payload:
-            return '对方尚未提交表单', 403
+            return '對方尚未提交表單', 403
     except:
         pass
     Message.create(room=room, role=role, content=content, payload={})
@@ -52,7 +52,7 @@ def post_message_payload(room, role):
     try:
         lastmsg = Message.select().where(Message.room == room).order_by(-Message.id).first()
         if lastmsg.role != role:
-            return '上一次不是己方发送消息', 403
+            return '上次不是己方發送消息', 403
         elif lastmsg.payload:
             return '已經提交表單', 403
     except:

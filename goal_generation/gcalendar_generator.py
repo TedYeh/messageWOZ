@@ -17,11 +17,35 @@ class GcalendarGenerator:
         self.constraints2weight = {
             "是否全天": {'是': 1, '否': 5}
         }
-        
+        #self.min_constraints = 1
+        #self.max_constraints = 3
+        #self.min_require = 1
+        #self.max_require = 3
+        #self.order_prob = 0.1
         self.twodish_prob = 0.15
         self.all_attrs = ['名稱', '參加者', '活動內容', '活動地點', '是否全天', '活動時間']
+        #self.all_attrs = ['參加者', '活動內容', '活動地點', '是否全天']
         self.actions = ['search', 'create']
-        
+        #self.cooccur = {}  # check if the list is empty
+        #for res in self.database:
+        #    for dish in res['推荐菜']:
+        #        self.cooccur[dish] = self.cooccur.get(dish, set()).union(set(res['推荐菜']))
+        #        self.cooccur[dish].remove(dish)
+        #all_dish = [dish for res in self.database for dish in res['推荐菜']]
+        #all_dish = Counter(all_dish)
+        #for k,v in all_dish.items():
+        #    if v==1:
+        #        del self.cooccur[k]
+        #self.time2weight = {}
+        #for hour in range(0, 23):
+        #    for minute in [':00', ':30']:
+        #        timePoint = str(hour) + minute
+        #        if hour in [11, 12, 17, 18]:  # 饭点
+        #            self.time2weight[timePoint] = 20
+        #        elif hour in list(range(0, 7)):  # 深夜/清晨
+        #            self.time2weight[timePoint] = 1
+        #        else:  # 白天非饭点
+        #            self.time2weight[timePoint] = 5
 
     def generate(self, goal_num=0, exist_goal=None, random_seed=None):
         name_flag = False
@@ -47,11 +71,9 @@ class GcalendarGenerator:
         else:
             goal['生成方式'] = '單領域生成'
         # generate constraints
-        random_req = deepcopy(self.all_attrs)
-        
+        random_req = deepcopy(self.all_attrs)        
         random_req.remove('名稱')
-        random_req.remove('活動時間')
-        
+        random_req.remove('活動時間')        
         random_req.remove('是否全天')    
         if not exist_goal and random.random() < self.constraints2prob['是否全天']:
             v = self.constraints2weight['是否全天']
@@ -60,7 +82,6 @@ class GcalendarGenerator:
                 goal['約束條件'] = [['是否全天', is_allday]]
                 goal['需求訊息'].append(['名稱', ""])
                 name_flag = True
-        
 
         # generate required information
         if not name_flag:            

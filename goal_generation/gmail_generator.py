@@ -9,9 +9,15 @@ import numpy as np
 class GmailGenerator:
     def __init__(self, database):
         self.database = database.values()
-        self.all_attrs = ['收件者', '寄件者', '郵件主旨', '內容']
+        self.constraints2weight = {
+            "加密副本": {'是': 2, '否': 6}
+        }
+        self.constraints2prob = {
+            "密件副本收件者": 0.3,
+            "副本收件者": 0.7
+        }
+        self.all_attrs = ['收件者', '寄件者', '郵件主旨', '內容', '副本收件者', '密件副本收件者']
         self.actions = ['search', 'create']
-        
 
     def generate(self, goal_num=0, exist_goal=None, random_seed=None):
         name_flag = False
@@ -29,6 +35,7 @@ class GmailGenerator:
             "動作": "寄一封郵件" if act == 'create' else "查詢一封郵件"
         }
         # generate method
+        
         if exist_goal:
             goal['生成方式'] = 'id={}裡的{}'.format(exist_goal["id"], "行事曆")
             goal['約束條件'].append(['信件主旨', '出現在id={}的{}裡'.format(exist_goal["id"], "行事曆")])
@@ -42,18 +49,29 @@ class GmailGenerator:
             random_req.remove('收件者')
             random_req.remove('寄件者')
             random_req.remove('郵件主旨')
-            random_req.remove('內容')
+            random_req.remove('內容')  
+            random_req.remove('副本收件者')          
+            random_req.remove('密件副本收件者')
         else:
             random_req.remove('郵件主旨')
+            random_req.remove('副本收件者')          
+            random_req.remove('密件副本收件者')
 
         # generate required information
         if not name_flag:
             if act == 'create':
+                if not exist_goal and random.random() < self.constraints2prob['密件副本收件者']:                    
+                    goal['需求訊息'].append(['密件副本收件者', ""])
+                if not exist_goal and random.random() < self.constraints2prob['副本收件者']:                    
+                    goal['需求訊息'].append(['副本收件者', ""])
                 goal['需求訊息'].append(['收件者', ""])
                 goal['需求訊息'].append(['郵件主旨', ""])
-                goal['需求訊息'].append(['內容', ""])
-                
+                goal['需求訊息'].append(['內容', ""])                
             else:
+                if not exist_goal and random.random() < self.constraints2prob['密件副本收件者']:                    
+                    goal['需求訊息'].append(['密件副本收件者', ""])
+                if not exist_goal and random.random() < self.constraints2prob['副本收件者']:                    
+                    goal['需求訊息'].append(['副本收件者', ""])
                 goal['需求訊息'].append(['郵件主旨', ""])
 
         random.shuffle(random_req)
@@ -61,7 +79,9 @@ class GmailGenerator:
         for k in random_req:
             if req_num > 0:
                 goal['需求訊息'].append([k, ""])
-                req_num -= 1            
+                req_num -= 1
+                #if k == '收件者':
+                #    name_flag = True
             else:
                 break
 
@@ -85,7 +105,7 @@ class MessageGenerator:
             "需求訊息": [],
             '預訂訊息': [],
             "生成方式": "",
-            "動作": "寄一則訊息"
+            "動作": "傳送一則訊息"
         }
         # generate method
         if exist_goal:

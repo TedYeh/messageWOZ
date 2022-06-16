@@ -36,7 +36,8 @@ class SentenceGenerator:
                     if goal['動作'] == '寄一封郵件':
                         sen += "你要寄一封信(id=%d)。" % goal['id']
                     else: sen += "你要找一封信(id=%d)。" % goal['id']
-
+                
+                
             elif domain == "Calendar":
                 for constraint in goal["約束條件"]:
                     if constraint[0] == "名稱":
@@ -62,14 +63,14 @@ class SentenceGenerator:
                     if constraint[0] == "使用者":
                         if '裡' in constraint[1]:
                             origin_id = int(constraint[1].split('id=')[1][0])
-                            if goal['動作'] == '寄一則訊息':
-                                sen += ('你要寄一則有id=%d收件者的(id=%d)訊息。' % (origin_id, goal['id']))
+                            if goal['動作'] == '傳送一則訊息':
+                                sen += ('你要傳送一則有id=%d收件者的(id=%d)訊息。' % (origin_id, goal['id']))
                         else:
-                            if goal['動作'] == '寄一則訊息':
-                                sen += ('你要寄一封主旨叫%s的信件(id=%d)。' % (constraint[1], goal['id']))
+                            if goal['動作'] == '傳送一則訊息':
+                                sen += ('你要傳送一封主旨叫%s的信件(id=%d)。' % (constraint[1], goal['id']))
                 if sen == '':
-                    if goal['動作'] == '寄一則訊息':
-                        sen += "你要寄一則訊息(id=%d)。" % goal['id']
+                    if goal['動作'] == '傳送一則訊息':
+                        sen += "你要傳送一則訊息(id=%d)。" % goal['id']
             
             if domain == 'Gmail': d = '郵件'
             elif domain == 'Calendar': d = '活動' 
