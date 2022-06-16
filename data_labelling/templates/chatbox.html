@@ -14,7 +14,7 @@
         :ourside="role === {{ role }}"
       />
     </div>
-    <textarea v-model="draft" @keydown.enter="handleEnter" id="chatbox-sender" class="card-footer" spellcheck="false" onkeydown="curDialogue(this.id)"></textarea>
+    <textarea v-model="draft" @keypress.enter="handleEnter" id="chatbox-sender" class="card-footer" spellcheck="false"></textarea>
     <div id="chatbox-footer" class="card-footer d-flex">
       <div v-if="tips" class="text-muted ml-1 my-auto" style="font-size: 14px" v-text="tips"></div>
       {% if role %}
@@ -62,7 +62,7 @@
         lastmsg (nVal, oVal) {
           if (nVal.role === Number('{{ role }}') && !nVal.payload){
             vm2.$data.canSubmit = true
-            vm3.$data.canSubmit = true
+            //vm3.$data.canSubmit = true
           } 
         }
       },
@@ -111,13 +111,17 @@
         isEmpty: str => /^\s*$/.test(str)
       },
       mounted () {
+        console.log('this.isInMyTurn',this.isInMyTurn)
+        
+        console.log('this.locking',this.locking)
         this.update().then(() => (this.initialized = true))
-        const socket = io.connect(`${window.location.origin}/room/{{ room.id }}`)
-        socket.on('connect', () => {
-          console.log('[WS] connected')
+        console.log('this.initialized',this.initialized)
+        const socket = io.connect(`${window.location.origin}/room/{{ room.id }}`, {secure:true});
+        socket.on('connect', (socket) => {
+          console.log('[WS] connected', socket)
         })
-        socket.on('disconnect', () => {
-          console.log('[WS] disconnected')
+        socket.on('disconnect', (socket) => {
+          console.log('[WS] disconnected', socket)
         })
         socket.on('update', () => this.update())
         if (!Number('{{ role }}')) {

@@ -24,6 +24,7 @@ class BaseModel(Model):
 class User(BaseModel):
     username = CharField(unique=True)
     password_hash = CharField()
+    google_cridential = JSONField(null=True)
 
     is_admin = BooleanField(default=False)
 
@@ -33,6 +34,11 @@ class User(BaseModel):
 
     def updateTasksCount(self):
         self.tasks_done = Room.select().where((Room.status_code == Room.Status.SUCCESS.value) & ((Room.user0 == self) | (Room.user1 == self))).count()
+        self.save()
+
+    def updateGoogleCridential(self, new_google_cridential):
+        #self.google_cridential = new_google_cridential
+        self.google_cridential.update({k: v for k, v in new_google_cridential.items() if v!=None})
         self.save()
 
 

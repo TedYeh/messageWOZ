@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% import 'heading.html' as heading %}
 
-{% block title %} 匹配 {% endblock %}
+{% block title %} 配對 {% endblock %}
 
 {% block style %}
   <style type="text/css">
@@ -17,19 +17,19 @@
     {{ heading.render() }}
     <div class="container">
       <div class="mx-auto mb-3 mt-3 px-3 py-3 text-center">
-        <h1>尋找匹配</h1>
+        <h1>尋找配對</h1>
         <p class="lead text-muted">
-          選擇一個偏好角色，與其他用戶進行匹配。
+          選擇一個偏好角色，與其他用戶進行配對。
         </p>
       </div>
       <div class="row">
         <div class="col-6 text-center">
-          <h3 class="mb-3">系統</h3>
+          <h3 class="mb-3">助理</h3>
           <button id="as_system" class="btn btn-sq btn-primary mb-3">
             <i class="fas fa-desktop fa-8x"></i>
           </button>
           <p>
-            當前等待人數：<span id="num_waiting_0"></span>
+            目前等待人數：<span id="num_waiting_1"></span>
           </p>
         </div>
         <div class="col-6 text-center">
@@ -38,13 +38,13 @@
             <i class="fas fa-user fa-8x"></i>
           </button>
           <p>
-            當前等待人數：<span id="num_waiting_1"></span>
+            目前等待人數：<span id="num_waiting_0"></span>
           </p>
         </div>
       </div>
       <div style="display: none" id="div_matching" class="py-3 text-center">
         <h3 class="mb-3">
-          匹配中<span id="ellipses"></span></h3>
+          配對中<span id="ellipses"></span></h3>
         <button id="quit_matching" class="btn btn-danger btn-lg">取消</button>
       </div>
     </div>
@@ -63,8 +63,8 @@
           alert('沒有未完成的任務！');
           return
         }
-        role = 0;
-        axios.post('enter-queue/0')
+        role = 1;
+        axios.post('enter-queue/1')
           .then(function (res) {
             console.log(res);
           })
@@ -81,8 +81,8 @@
           alert('沒有未完成的任務！');
           return
         }
-        role = 1;
-        axios.post('enter-queue/1')
+        role = 0;
+        axios.post('enter-queue/0')
           .then(function (res) {
             console.log(res);
           })
@@ -141,7 +141,7 @@
 
       function enter_room(room_id) {
         clearInterval(timer_update);
-        alert('已經找到匹配，前往房間' + room_id);
+        alert('已經找到配對，前往房間' + room_id);
         window.location.href = '/room/' + room_id + '/' + role;
       }
 

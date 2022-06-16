@@ -3,6 +3,7 @@ flask
 flask-socketio
 flask-admin
 flask-login
+flask[async]
 redis
 python-redis-lock
 bcrypt
@@ -11,3 +12,8 @@ wtf-peewee
 eventlet
 redis
 python-redis-lock
+BeautifulSoup4
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+pip install pyopenssl

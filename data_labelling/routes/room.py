@@ -27,13 +27,13 @@ def post_message_content(room, role):
         data = json.loads(data)
         content = data['content']
     except:
-        return '格式错误', 400
+        return '格式錯誤', 400
     try:
         lastmsg = Message.select().where(Message.room == room).order_by(-Message.id).first()
         if lastmsg.role == role:
-            return '不得连续两次发送消息', 403
+            return '不得連續兩次發送消息', 403
         elif not lastmsg.payload:
-            return '对方尚未提交表单', 403
+            return '對方尚未提交表單', 403
     except:
         pass
     Message.create(room=room, role=role, content=content, payload={})
@@ -48,13 +48,13 @@ def post_message_payload(room, role):
         data = json.loads(data)
         payload = data['payload']
     except:
-        return '格式错误', 400
+        return '格式錯誤', 400
     try:
         lastmsg = Message.select().where(Message.room == room).order_by(-Message.id).first()
         if lastmsg.role != role:
-            return '上一次不是己方发送消息', 403
+            return '上次不是己方發送消息', 403
         elif lastmsg.payload:
-            return '已经提交表单', 403
+            return '已經提交表單', 403
     except:
         pass
     lastmsg.payload = payload
@@ -72,15 +72,15 @@ def room(room, role):
 @room_guard
 def leave(room):
     if not room.user1 == g.me:
-        return '只有用户可以结束任务', 400
+        return '只有用戶可以結束任務', 400
     try:
         lastmsg = Message.select().where((Message.room == room) & (Message.role == 1)).order_by(-Message.id).first()
         if not lastmsg:
-            return '还没消息', 403
+            return '還沒有消息', 403
         gugu = lastmsg.payload
         for item in gugu:
             if not item[3]:
-                return '表单没填完', 403
+                return '表單還沒填完', 403
     except:
         pass
 

@@ -1,5 +1,5 @@
 {% macro render1(room) %}
-  <div class="card h-50" style="overflow: auto">
+  <div class="card h-100" style="overflow: auto">
     <div class="card-body">
       <h4>任務描述</h4>
       <hr>
@@ -10,6 +10,7 @@
       </ol>
     </div>     
   </div>  
+  <!--
   <div id="render3" class="d-flex card h-50 " style="overflow: auto">
     <div class="card-body">
       <h4>添加意圖</h4>
@@ -25,7 +26,7 @@
         <select id="intention" class="custom-select" onchange="setDomain(this.id)">
           <option value="" selected> </option>
         </select>
-        <!--<input id="intention" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">-->
+        
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -34,7 +35,7 @@
         <select id="domain" class="custom-select" onchange="setSlot(this.id)">
           <option value="" selected> </option>
         </select>
-        <!--<input id="domain" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">-->
+        
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -43,7 +44,7 @@
         <select id="slot" class="custom-select">
           <option value="" selected> </option>
         </select>      
-        <!--<input id="slot" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">-->
+        
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -53,7 +54,7 @@
       </div>         
       <button class="btn btn-light btn-block" onclick="addelement();">添加意圖</button>
     </div>
-  </div>   
+  </div>-->
 {% endmacro %}
 
 {% macro render2(room) %}
@@ -86,29 +87,7 @@
 
 {% macro script(room) %}
   <script type="text/javascript">
-    function resetElement() {
-      document.getElementById("intention").value='';
-      document.getElementById("domain").value='';
-      document.getElementById("slot").value='';
-      document.getElementById("value").value='';
-    }
-
-    var intentions = []
-    function addelement() {
-      var intent = document.getElementById("intention").value;
-      var domain = document.getElementById("domain").value;
-      var slot = document.getElementById("slot").value;
-      var value = document.getElementById("value").value;
-      intentions.push([
-        intent,
-        domain,
-        slot,
-        value
-      ]);
-      console.log('intents', intentions)
-      resetElement();
-    }    
-
+    
     const vm2 = new Vue({
       el: '#render2',
       data () {
@@ -134,38 +113,18 @@
         async submitForm () {
           //console.log("item[4]",this.items[4])
           if (!this.canSubmit) return
-          if (!intentions.length){
-            alert('未完成意圖標記！');
-            return
-          }else if (intentions.length && !confirm('是否已經完成意圖標記？'))return 
-          else{
-            if (this.items && !this.items.filter(item => item[4]).length) {
+          if (this.items && !this.items.filter(item => item[4]).length) {
               if (!confirm('未選中任何內容，確定要發送嗎？')) return
             }
-            try {
-              check_items = Object.assign([], this.items.filter(item => item[4]))//Array.from(this.items.filter(item => item[4]))
-              console.log('check_items', check_items)
-              for (let i=0; i<check_items.length; i++){
-                tmp = Object.assign([], check_items[i])
-                tmp.splice(1, 0, 'Inform')
-                intentions.push(tmp.slice(1,5))
-              }
-              
-              // intentions.concat(this.items.filter(item => item[4]).slice(0,3))
-              p = Object.assign({user_state: this.items}, {dialog_act: intentions})
-              console.log('p', p)
-              // console.log(JSON.parse(JSON.stringify(this.items)))
-              await axios.post(`/room/{{ room.id }}/1/message/payload`, {
-                //dialog_act: intentions,
-                payload: p
-              })
-              this.items.forEach(item => Vue.set(item, 4, false))
-              this.canSubmit = false
-              console.log(intentions)
-              intentions = []
-            } catch (err) {
-              console.error(err)
-            }
+          try {
+            // console.log(JSON.parse(JSON.stringify(this.items)))
+            await axios.post(`/room/{{ room.id }}/0/message/payload`, {
+              payload: this.items
+            })
+            this.items.forEach(item => Vue.set(item, 4, false))
+            this.canSubmit = false
+          } catch (err) {
+            console.error(err)
           }
         }
       },

@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="440271899250-bc71l6vb1bosremrab6kmcgeujnq4p6k.apps.googleusercontent.com">
   <title>{% block title %}{% endblock %}</title>
 
   <link href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
@@ -30,16 +33,33 @@
 <script src="{{ url_for('static', filename='js/vue.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/socket.io.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sweetalert2.all.min.js') }}"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"
         integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
-  function curDialogue(id){
-    var msg = document.getElementById(id).value;
-    document.getElementById('currentMsg').innerHTML = msg;
-  }
 
-  var intent = ['General', 'Inform', 'Request']
+    var googleDate = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.(\d{3})([+-]\d{2}):(\d{2})$/;
+
+    function parseGoogleDate(d) {
+        var m = googleDate.exec(d);
+        var year   = +m[1];
+        var month  = +m[2];
+        var day    = +m[3];
+        var hour   = +m[4];
+        var minute = +m[5];
+        var second = +m[6];
+        var msec   = +m[7];
+        var tzHour = +m[8];
+        var tzMin  = +m[9];
+        var tzOffset = tzHour * 60 + tzMin;
+
+        return Date.UTC(year, month - 1, day, hour, minute - tzOffset, second, msec);
+    }
+    //console.log(parseGoogleDate('2012-07-04T18:10:00.000+09:00'));
+    /*
+    var intent = ['General', 'Inform', 'Request']
     var domain = {
       'General':['bye', 'greet', 'thank'],
       'Inform':['Calendar', 'Gmail', 'Line'],
@@ -50,7 +70,34 @@
       'Gmail':["收件者", "寄件者", "郵件主旨", "信件內容", "副本收件者"],
       'Line':["收件者", "傳送內容"]
     }
-    
+    function curDialogue(id){
+      var msg = document.getElementById(id).value;
+      document.getElementById('currentMsg').innerHTML = msg;
+    }
+
+    function resetElement() {
+      document.getElementById("intention").value='';
+      document.getElementById("domain").value='';
+      document.getElementById("slot").value='';
+      document.getElementById("value").value='';
+    }
+
+    var intentions = []
+    function addelement() {
+      var intent = document.getElementById("intention").value;
+      var domain = document.getElementById("domain").value;
+      var slot = document.getElementById("slot").value;
+      var value = document.getElementById("value").value;
+      intentions.push([
+        intent,
+        domain,
+        slot,
+        value
+      ]);
+      console.log('intents', intentions)
+      resetElement();
+    }    
+
     function setDomain(intentID){
       console.log(document.getElementById(intentID).value);
       document.getElementById('domain').innerHTML = '<option value="" selected> </option>'
@@ -68,13 +115,12 @@
         for(let i = 0; i < slot[select_domain].length; i++)
           document.getElementById('slot').innerHTML += '<option value=' + slot[select_domain][i] + '>'+ slot[select_domain][i] +'</option>';
     }
-
-    $(document).ready(
-      function(){
+    
+    $(document).ready(function(){
         for(let i = 0; i < intent.length; i++) 
           document.getElementById('intention').innerHTML += '<option value=' + intent[i] + '>'+ intent[i] +'</option>';
-      }
-    );
+    });
+    */
 </script>
 {% block script %}{% endblock %}
 </body>
