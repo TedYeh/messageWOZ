@@ -59,7 +59,7 @@
       </li>
     </ul>
     <div v-show="initialized" class="card-body" style="overflow: auto; display: none;">
-      <div @keyup.enter="submit">
+      <div>
         <div v-for="(item, name) in query[activeField]" :key="activeField + name" class="form-group row">
           <span class="col-3 col-form-label col-form-label-sm" ><input v-model="item.checked" type="checkbox"><label v-text="name"></label></span>
           <template v-if="item.type === 'between'">
@@ -195,7 +195,10 @@
         async ask (payload) {
           const db = this.database[payload.field]
           const contains = (arr, s) => {
-            return !arr.filter(item => !(item.indexOf(s) < 0)).length
+            if (typeof arr !== 'undefined') {
+              return !arr.filter(item => !(item.indexOf(s) < 0)).length
+            }
+            return !false
           }
           
           if (!db) return []
