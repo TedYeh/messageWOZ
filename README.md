@@ -14,7 +14,7 @@
 <h2 id="Environment-setup">Environment setup</h2>
 
 ### Requirements
-* python >= 3.6
+* python = 3.8
 
 ### Development Startup
 
@@ -39,7 +39,7 @@ Run the following command and visit http://0.0.0.0:5000 (boardcast).
 
 ```bash
 # clone the repo in branch GCPlogin
-git clone -b GCPlogin --single-branch https://github.com/TedYeh/messageWOZ.git
+git clone -b multichat-https --single-branch https://github.com/TedYeh/messageWOZ.git
 
 # change the directory 
 cd messageWOZ
@@ -51,7 +51,7 @@ python3 -m pip install -r requirements.txt
 python3 resetdb.py
 
 # start the server
-python3 run.py
+gunicorn --bind 0.0.0.0:5000 --certfile=server.crt --keyfile=server.key --worker-class eventlet -w 1 data_labelling:app
 ```
 Or you can change the code 
 ```python
